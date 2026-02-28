@@ -26,8 +26,8 @@ The server analyses a Laravel project as an **external target** — it does not 
 - 📦 **Dependency CVE feed** — queries the [OSV.dev](https://osv.dev/) API for real CVEs across all `composer.lock` packages
 - ⚙️ **Configuration audit** — inspects `.env` (DEBUG, APP_KEY, APP_ENV, secure cookies) and `config/cors.php`
 - 🗂️ **Project metadata** — reads `composer.json` to identify Laravel and PHP version constraints
-- � **Active attack simulation** — fires HTTP probes (SQL injection, XSS, CSRF, auth bypass, rate limiting) against a running app
-- �🔒 **Path traversal prevention** — strict allowlist enforcement for all file operations
+- 💥 **Active attack simulation** — fires HTTP probes (SQL injection, XSS, CSRF, auth bypass, rate limiting) against a running app
+- 🔒 **Path traversal prevention** — strict allowlist enforcement for all file operations
 - ✂️ **Secret redaction** — sensitive values are masked in textual output before reaching the MCP client
 - 🚀 **stdio transport** — zero-config network; works inside any IDE that supports MCP
 
@@ -93,7 +93,7 @@ Every tool returns a structured JSON report:
   "metadata": {
     "scannedPath": "/absolute/path/to/laravel-project",
     "engine": "Laraguard MCP",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "timestamp": "2025-01-01T00:00:00.000Z",
     "durationMs": 312
   }
