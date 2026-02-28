@@ -1,4 +1,6 @@
 # Laraguard MCP
+<img width="100%"  alt="image" src="https://github.com/user-attachments/assets/27731e3b-2a15-4b1a-b2e3-c76fca96fff5" />
+
 
 > **A security audit MCP server for Laravel projects — built with TypeScript and stdio transport.**
 
