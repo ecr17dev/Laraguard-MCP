@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import type { Dirent } from 'node:fs';
 import path from 'node:path';
 import type { McpConfig } from './config.js';
 
@@ -29,7 +30,12 @@ async function walk(
 ): Promise<void> {
   if (acc.length >= config.maxFiles) return;
 
-  const entries = await fs.readdir(currentDir, { withFileTypes: true });
+  let entries: Dirent[];
+  try {
+    entries = (await fs.readdir(currentDir, { withFileTypes: true })) as unknown as Dirent[];
+  } catch {
+    return;
+  }
 
   for (const entry of entries) {
     if (acc.length >= config.maxFiles) return;
@@ -71,6 +77,66 @@ export async function readPhpFiles(basePath: string, config: McpConfig): Promise
       relativePath: path.relative(basePath, file),
       content,
     });
+  }
+
+  return results;
+}
+
+/**
+ * Reads all Blade template files (.blade.php) from resources/views/.
+ * Used by bladeScanTool to detect XSS patterns in templates.
+ */
+export async function readBladeFiles(basePath: string, config: McpConfig): Promise<FileEntry[]> {
+  const viewsDir = path.join(basePath, 'resources', 'views');
+
+  try {
+    await fs.access(viewsDir);
+  } catch {
+    return [];
+  }
+
+  const acc: string[] = [];
+  await walk(viewsDir, viewsDir, config, acc);
+  const bladeFiles = acc.filter((f) => f.endsWith('.blade.php') || f.endsWith('.php'));
+
+  const results: FileEntry[] = [];
+  for (const file of bladeFiles) {
+    try {
+      const content = await fs.readFile(file, 'utf8');
+      results.push({
+        absolutePath: file,
+        relativePath: path.relative(basePath, file),
+        content,
+      });
+    } catch {
+      // skip unreadable files
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Reads a list of specific files by their relative paths within basePath.
+ * Used by routeAuditTool to read known Laravel files (routes/, VerifyCsrfToken, etc.).
+ */
+export async function readSpecificFiles(
+  basePath: string,
+  relativePaths: string[],
+  config: McpConfig,
+): Promise<FileEntry[]> {
+  const results: FileEntry[] = [];
+
+  for (const rel of relativePaths) {
+    const abs = path.join(basePath, rel);
+    try {
+      const stat = await fs.stat(abs);
+      if (stat.size > config.maxFileSizeBytes) continue;
+      const content = await fs.readFile(abs, 'utf8');
+      results.push({ absolutePath: abs, relativePath: rel, content });
+    } catch {
+      // file does not exist or is unreadable — skip silently
+    }
   }
 
   return results;

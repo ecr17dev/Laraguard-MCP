@@ -1,6 +1,6 @@
 {
   "name": "laraguard-mcp",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "Security audit MCP server for Laravel projects (TypeScript, stdio)",
   "type": "module",
   "main": "dist/index.js",
