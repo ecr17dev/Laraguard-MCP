@@ -1,0 +1,53 @@
+Laraguard MCP
+=============
+TypeScript MCP Server for Laravel Security Audits
+
+Overview
+--------
+Laraguard MCP is a standalone MCP server implemented in TypeScript using the official
+@modelcontextprotocol/sdk and stdio transport.
+
+It audits Laravel projects as external targets and returns structured JSON findings.
+
+Exposed Tools
+-------------
+1) project_info
+2) dependency_audit
+3) config_audit
+4) code_scan
+5) full_audit
+
+Security Controls
+-----------------
+- Allowed base path enforcement (MCP_BASE_PATH / MCP_BASE_PATHS)
+- Path traversal prevention
+- Max file count and max file size limits
+- Excluded directories and file extensions
+- Basic secret redaction in textual output
+
+Environment Variables
+---------------------
+- MCP_BASE_PATH
+- MCP_BASE_PATHS
+- MCP_MAX_FILES
+- MCP_MAX_FILE_SIZE_BYTES
+- MCP_TIMEOUT_SECONDS
+
+Run
+---
+Development:
+- npm run dev
+
+Production:
+- npm run build
+- npm run start
+
+MCP Configuration
+-----------------
+Use in any MCP-compatible IDE/client by pointing to:
+- node /absolute/path/to/dist/index.js
+
+Mission
+-------
+Provide a reusable, secure, and portable MCP security audit server for Laravel
+projects that works across IDEs and MCP clients.
