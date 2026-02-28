@@ -132,7 +132,7 @@ npm -v
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/your-org/laraguard-mcp.git
+git clone https://github.com/ecr17dev/Laraguard-MCP.git
 cd "Laraguard MCP"
 npm install
 ```
